@@ -49,6 +49,7 @@ export const PropertyTypeMap: Record<DB_PROPERTIES_KEYS, NotionPropTypesEnum> = 
   SCREENWRITERS: NotionPropTypesEnum.RICH_TEXT,
   ACTORS: NotionPropTypesEnum.RICH_TEXT,
   GENRE: NotionPropTypesEnum.MULTI_SELECT,
+  PROD_COUNTRY: NotionPropTypesEnum.RICH_TEXT,
   ITEM_LINK: NotionPropTypesEnum.URL,
   IMDB_LINK: NotionPropTypesEnum.URL,
   RELEASE_DATE: NotionPropTypesEnum.DATE,
