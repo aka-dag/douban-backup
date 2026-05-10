@@ -45,7 +45,6 @@ export const PropertyTypeMap: Record<DB_PROPERTIES_KEYS, NotionPropTypesEnum> = 
   RATING: NotionPropTypesEnum.SELECT,
   RATING_DATE: NotionPropTypesEnum.DATE,
   COMMENTS: NotionPropTypesEnum.RICH_TEXT,
-  YEAR: NotionPropTypesEnum.NUMBER,
   DIRECTORS: NotionPropTypesEnum.RICH_TEXT,
   SCREENWRITERS: NotionPropTypesEnum.RICH_TEXT,
   ACTORS: NotionPropTypesEnum.RICH_TEXT,

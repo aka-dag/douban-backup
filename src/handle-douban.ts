@@ -106,9 +106,18 @@ const InfoSelector = '#info span.pl';
 
 function buildMovieItem(doc: Document) {
   const title = doc.querySelector('#content h1 [property="v:itemreviewed"]')?.textContent?.trim() || '';
-  const year = doc.querySelector('#content h1 .year')?.textContent?.slice(1, -1) || '';
   const img = doc.querySelector(ImgSelector) as HTMLImageElement;
   const poster = img?.title === ImgDefaultTitle.Poster ? img?.src?.trim().replace(/\.webp$/, '.jpg') : '';
+
+  // Extract release date from v:initialReleaseDate (first one if multiple)
+  const releaseDateEls = doc.querySelectorAll('[property="v:initialReleaseDate"]');
+  let releaseDate = '';
+  if (releaseDateEls.length > 0) {
+    const rawDate = releaseDateEls[0].textContent?.trim() || '';
+    if (rawDate) {
+      releaseDate = dayjs(rawDate).format('YYYY-MM-DD');
+    }
+  }
 
   const infoPl = [...doc.querySelectorAll(InfoSelector)];
   const directorPl = infoPl.filter(i => i.textContent === '导演');
@@ -131,7 +140,7 @@ function buildMovieItem(doc: Document) {
   return {
     [DB_PROPERTIES.NAME]: title,
     [DB_PROPERTIES.MOVIE_TITLE]: title,
-    [DB_PROPERTIES.YEAR]: year,
+    [DB_PROPERTIES.RELEASE_DATE]: releaseDate, // use release date instead of year
     [DB_PROPERTIES.POSTER]: poster, // optional
     [DB_PROPERTIES.DIRECTORS]: directors,
     [DB_PROPERTIES.SCREENWRITERS]: writers, // optional
