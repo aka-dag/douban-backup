@@ -42,7 +42,7 @@ export const PropertyTypeMap: Record<DB_PROPERTIES_KEYS, NotionPropTypesEnum> = 
   GAME_TITLE: NotionPropTypesEnum.TITLE,
   DRAMA_TITLE: NotionPropTypesEnum.TITLE,
   COVER: NotionPropTypesEnum.FILES,
-  RATING: NotionPropTypesEnum.MULTI_SELECT,
+  RATING: NotionPropTypesEnum.SELECT,
   RATING_DATE: NotionPropTypesEnum.DATE,
   COMMENTS: NotionPropTypesEnum.RICH_TEXT,
   YEAR: NotionPropTypesEnum.NUMBER,
