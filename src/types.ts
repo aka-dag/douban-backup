@@ -11,7 +11,6 @@ export enum ItemCategory {
   Drama = 'drama',
 };
 
-// follow the schema value of Neodb
 export enum ItemStatus {
   Wishlist = 'wishlist',
   Progress = 'progress',
@@ -36,6 +35,7 @@ export enum NotionPropTypesEnum {
   TITLE = 'title',
   RICH_TEXT = 'rich_text',
   FILES = 'files',
+  SELECT = 'select',
   DATE = 'date',
   MULTI_SELECT = 'multi_select',
   NUMBER = 'number',
@@ -45,52 +45,37 @@ export enum NotionPropTypesEnum {
 export type NotionRichTextPropType = {
   id?: string;
   type: NotionPropTypesEnum.RICH_TEXT;
-  rich_text: {
-    type: 'text';
-    text: {
-      content: string;
-    };
-  }[];
+  rich_text: { type: 'text'; text: { content: string; } }[];
 };
 
 export type NotionTitlePropType = {
   id?: 'title';
   type: NotionPropTypesEnum.TITLE;
-  title: {
-    text: {
-      content: string;
-    };
-  }[];
+  title: { text: { content: string; } }[];
 };
 
 export type NotionFilesPropType = {
   id?: string;
   type: NotionPropTypesEnum.FILES;
-  files: {
-    name: string;
-    type: 'external';
-    external: {
-      url: string;
-    };
-  }[];
+  files: { name: string; type: 'external'; external: { url: string; } }[];
+};
+
+export type NotionSelectPropType = {
+  id?: string;
+  type: NotionPropTypesEnum.SELECT;
+  select: { name: string; } | null;
 };
 
 export type NotionDatePropType = {
   id?: string;
   type: NotionPropTypesEnum.DATE;
-  date: {
-    start: string;
-    end: string | null;
-    time_zone: string | null;
-  };
+  date: { start: string; end: string | null; time_zone: string | null; };
 };
 
 export type NotionMultiSelectPropType = {
   id?: string;
   type: NotionPropTypesEnum.MULTI_SELECT;
-  multi_select: {
-    name: string;
-  }[];
+  multi_select: { name: string; }[];
 };
 
 export type NotionNumberPropType = {
@@ -109,6 +94,7 @@ export type NotionColPropTypes =
   | NotionRichTextPropType
   | NotionTitlePropType
   | NotionFilesPropType
+  | NotionSelectPropType
   | NotionDatePropType
   | NotionMultiSelectPropType
   | NotionNumberPropType
