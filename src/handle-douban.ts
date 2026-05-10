@@ -137,6 +137,20 @@ function buildMovieItem(doc: Document) {
   const imdbInfo = [...doc.querySelectorAll(InfoSelector)].filter(i => i.textContent?.startsWith('IMDb'));
   const imdbLink = imdbInfo.length ? 'https://www.imdb.com/title/' + imdbInfo[0].nextSibling?.textContent?.trim() : '';
 
+  // Extract production country
+  let productionCountry = '';
+  const countryPl = infoPl.filter(i => i.textContent?.includes('制片国家'));
+  if (countryPl.length > 0) {
+    let txt = '';
+    let node = countryPl[0].nextSibling;
+    while (node && !(node.nodeName === 'BR')) {
+      if (node.nodeType === 3) txt += node.textContent;
+      else if (node.nodeName === 'SPAN') txt += node.textContent;
+      node = node.nextSibling;
+    }
+    productionCountry = txt.trim();
+  }
+
   return {
     [DB_PROPERTIES.NAME]: title,
     [DB_PROPERTIES.MOVIE_TITLE]: title,
@@ -146,6 +160,7 @@ function buildMovieItem(doc: Document) {
     [DB_PROPERTIES.SCREENWRITERS]: writers, // optional
     [DB_PROPERTIES.ACTORS]: actors,
     [DB_PROPERTIES.GENRE]: genre,
+    [DB_PROPERTIES.PROD_COUNTRY]: productionCountry,
     [DB_PROPERTIES.IMDB_LINK]: imdbLink, // optional
   };
 }
