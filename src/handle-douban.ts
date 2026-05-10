@@ -106,9 +106,18 @@ const InfoSelector = '#info span.pl';
 
 function buildMovieItem(doc: Document) {
   const title = doc.querySelector('#content h1 [property="v:itemreviewed"]')?.textContent?.trim() || '';
-  const year = doc.querySelector('#content h1 .year')?.textContent?.slice(1, -1) || '';
   const img = doc.querySelector(ImgSelector) as HTMLImageElement;
   const poster = img?.title === ImgDefaultTitle.Poster ? img?.src?.trim().replace(/\.webp$/, '.jpg') : '';
+
+  // Extract release date from v:initialReleaseDate (first one if multiple)
+  const releaseDateEls = doc.querySelectorAll('[property="v:initialReleaseDate"]');
+  let releaseDate = '';
+  if (releaseDateEls.length > 0) {
+    const rawDate = releaseDateEls[0].textContent?.trim() || '';
+    if (rawDate) {
+      releaseDate = dayjs(rawDate).format('YYYY-MM-DD');
+    }
+  }
 
   const infoPl = [...doc.querySelectorAll(InfoSelector)];
   const directorPl = infoPl.filter(i => i.textContent === '导演');
@@ -128,15 +137,30 @@ function buildMovieItem(doc: Document) {
   const imdbInfo = [...doc.querySelectorAll(InfoSelector)].filter(i => i.textContent?.startsWith('IMDb'));
   const imdbLink = imdbInfo.length ? 'https://www.imdb.com/title/' + imdbInfo[0].nextSibling?.textContent?.trim() : '';
 
+  // Extract production country
+  let productionCountry = '';
+  const countryPl = infoPl.filter(i => i.textContent?.includes('制片国家'));
+  if (countryPl.length > 0) {
+    let txt = '';
+    let node = countryPl[0].nextSibling;
+    while (node && !(node.nodeName === 'BR')) {
+      if (node.nodeType === 3) txt += node.textContent;
+      else if (node.nodeName === 'SPAN') txt += node.textContent;
+      node = node.nextSibling;
+    }
+    productionCountry = txt.trim();
+  }
+
   return {
     [DB_PROPERTIES.NAME]: title,
     [DB_PROPERTIES.MOVIE_TITLE]: title,
-    [DB_PROPERTIES.YEAR]: year,
+    [DB_PROPERTIES.RELEASE_DATE]: releaseDate, // use release date instead of year
     [DB_PROPERTIES.POSTER]: poster, // optional
     [DB_PROPERTIES.DIRECTORS]: directors,
     [DB_PROPERTIES.SCREENWRITERS]: writers, // optional
     [DB_PROPERTIES.ACTORS]: actors,
     [DB_PROPERTIES.GENRE]: genre,
+    [DB_PROPERTIES.PROD_COUNTRY]: productionCountry,
     [DB_PROPERTIES.IMDB_LINK]: imdbLink, // optional
   };
 }
