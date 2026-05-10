@@ -46,7 +46,7 @@ export function buildPropertyValue(value: any, type: NotionPropTypesEnum, key: s
     case NotionPropTypesEnum.SELECT:
       return {
         type: NotionPropTypesEnum.SELECT,
-        select: value ? { name: value.toString() } : null,
+        select: value != null ? { name: String(value) } : null,
       } as NotionSelectPropType;
     case NotionPropTypesEnum.DATE:
       return {
